@@ -5,11 +5,6 @@ on:
 
 jobs:
   mvn:
-    uses: netcracker/qubership-workflow-hub/.github/workflows/maven-publish.yml@main
+    uses: TaurMorchant/workflows-test/.github/reusable-workflows/maven-build-and-deploy.yaml@main
     with:
-      maven-command: "--batch-mode install -Dgpg.skip=true org.sonarsource.scanner.maven:sonar-maven-plugin:5.0.0.4389:sonar -Dsonar.projectKey=TaurMorchant_qubership-dbaas-client-tmp -Dsonar.organization=vladislav-larkin-test-organization -Dsonar.host.url=https://sonarcloud.io"
-      server-id: github
       java-version: 21
-    secrets:
-      maven-token: ${{ secrets.GITHUB_TOKEN }}
-      sonar-token: ${{ secrets.SONAR_TOKEN }}
