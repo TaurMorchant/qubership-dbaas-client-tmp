@@ -5,7 +5,7 @@ on:
 
 jobs:
   mvn:
-    uses: TaurMorchant/workflows-test/.github/workflows/maven-build-and-deploy.yaml@main
+    uses: TaurMorchant/workflows-test/.github/workflows/run-maven-with-sonar.yaml@main
     with:
       maven-goal: install
       java-version: 21
