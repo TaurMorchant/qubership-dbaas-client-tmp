@@ -25,7 +25,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Map;
 
 import static org.qubership.cloud.dbaas.client.config.msframeworkspecific.testconfig.TestMongoDbConfiguration.*;
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.qubership.cloud.dbaas.client.DbaasConst.SCOPE;
 import static org.qubership.cloud.dbaas.client.DbaasConst.SERVICE;
 import static org.qubership.cloud.dbaas.client.config.DbaasMongoConfiguration.SERVICE_MONGO_TEMPLATE;
@@ -56,7 +55,7 @@ public class MongoDbClassifierTest {
 
     @BeforeEach
     public void setUp() {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(TENANT_ID));
+        ContextManager.set("tenant", new TenantContextObject(TENANT_ID));
     }
 
     private void initContext(Class<?> testClass) throws Exception {

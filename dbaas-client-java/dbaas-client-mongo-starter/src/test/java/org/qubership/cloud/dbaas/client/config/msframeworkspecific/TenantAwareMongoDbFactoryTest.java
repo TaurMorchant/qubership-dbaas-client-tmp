@@ -20,7 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.TreeMap;
 
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.qubership.cloud.dbaas.client.config.DbaasMongoConfiguration.TENANT_MONGO_TEMPLATE;
 import static org.qubership.cloud.dbaas.client.config.msframeworkspecific.testconfig.TestMongoDbConfiguration.TENANT_ID;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,8 +41,8 @@ public class TenantAwareMongoDbFactoryTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        ContextManager.clear(TENANT_CONTEXT_NAME);
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(TENANT_ID));
+        ContextManager.clear("tenant");
+        ContextManager.set("tenant", new TenantContextObject(TENANT_ID));
 
         MongoDatabase database = new MongoDatabase();
         database.setName(TestConstants.AUTH_DB_NAME);

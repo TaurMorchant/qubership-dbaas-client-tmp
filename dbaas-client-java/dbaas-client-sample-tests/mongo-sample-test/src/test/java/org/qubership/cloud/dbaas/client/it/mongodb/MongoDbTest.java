@@ -21,7 +21,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
 
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -53,7 +52,7 @@ public class MongoDbTest {
 
     @AfterEach
     public void clean() throws Exception {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test-tenant"));
+        ContextManager.set("tenant", new TenantContextObject("test-tenant"));
         mockMvc.perform(MockMvcRequestBuilders.delete(TEST_ENDPOINT + "/clear"));
     }
 
@@ -76,7 +75,7 @@ public class MongoDbTest {
     @Test
     public void testServiceMongoDbCreation() throws Exception {
         UUID testId = UUID.randomUUID();
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("tenant-for-cleaning"));
+        ContextManager.set("tenant", new TenantContextObject("tenant-for-cleaning"));
         sendRequest(TEST_ENDPOINT + SERVICE_ENDPOINT, true, testId.toString(), "service", null);
 
         assertEquals(testId.toString(), getContent(TEST_ENDPOINT + SERVICE_ENDPOINT));
@@ -85,7 +84,7 @@ public class MongoDbTest {
     @Test
     public void testTenantMongoDbCreation() throws Exception {
         UUID testId = UUID.randomUUID();
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test-tenant"));
+        ContextManager.set("tenant", new TenantContextObject("test-tenant"));
         sendRequest(TEST_ENDPOINT + TENANT_ENDPOINT, false, testId.toString(), "tenant", "test-tenant");
         assertEquals(testId.toString(), getContent(TEST_ENDPOINT + TENANT_ENDPOINT));
     }
@@ -93,11 +92,11 @@ public class MongoDbTest {
     @Test
     public void testMultitenancy() throws Exception {
         UUID firstTenantId = UUID.randomUUID();
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test-tenant-one"));
+        ContextManager.set("tenant", new TenantContextObject("test-tenant-one"));
         sendRequest(TEST_ENDPOINT + TENANT_ENDPOINT, false, firstTenantId.toString(), "tenant-one", "test-tenant-one");
         String firstContent = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
 
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test-tenant-two"));
+        ContextManager.set("tenant", new TenantContextObject("test-tenant-two"));
         UUID secondTenantId = UUID.randomUUID();
         sendRequest(TEST_ENDPOINT + TENANT_ENDPOINT, false, secondTenantId.toString(), "tenant-two", "test-tenant-two");
         String secondContent = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
@@ -112,7 +111,7 @@ public class MongoDbTest {
         String firstContent = getContent(TEST_ENDPOINT + SERVICE_ENDPOINT);
 
         UUID testTenantID = UUID.randomUUID();
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("another-tenant"));
+        ContextManager.set("tenant", new TenantContextObject("another-tenant"));
         sendRequest(TEST_ENDPOINT + TENANT_ENDPOINT, false, testTenantID.toString(), "tenant", "another-tenant");
         String tenantContent = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
 

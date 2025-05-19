@@ -53,7 +53,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.qubership.cloud.dbaas.client.opensearch.restclient.configuration.OpensearchTestConfiguration.*;
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = {"dbaas.api.opensearch.service.delimiter=-",
@@ -114,7 +113,7 @@ class DbaasOpensearchClientImplTest {
 
     @Test
     void createCustomTenantDatabase() throws IOException { //TODO аверное в opensearchClient тоит добавить возомжность конфигурить DatabaseConfig
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("1234"));
+        ContextManager.set("tenant", new TenantContextObject("1234"));
         String fullName = tenantClient.normalize("uniq_name");
         Map<String, String> indexData = Map.of("message", "test message");
         IndexRequest<Map<String, String>> indexRequest = new IndexRequest.Builder<Map<String, String>>()
@@ -132,7 +131,7 @@ class DbaasOpensearchClientImplTest {
     @Test
     @DirtiesContext
     void createCustomTenantDatabaseWithCutomBuild() throws IOException { //TODO аверное в opensearchClient тоит добавить возомжность конфигурить DatabaseConfig
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("1234"));
+        ContextManager.set("tenant", new TenantContextObject("1234"));
 
         DatabaseConfig.Builder builder = DatabaseConfig.builder();
         DatabaseConfig config = builder.dbNamePrefix("tenant-test1").build();

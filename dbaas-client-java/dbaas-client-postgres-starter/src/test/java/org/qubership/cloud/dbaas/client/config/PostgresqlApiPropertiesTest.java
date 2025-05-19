@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.qubership.cloud.dbaas.client.config.DbaasPostgresConfiguration.*;
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -86,7 +85,7 @@ public class PostgresqlApiPropertiesTest {
     }
     @Test
     public void checkPostgresqlTenantDatabaseApiProperties() throws SQLException {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(TENANT_ID));
+        ContextManager.set("tenant", new TenantContextObject(TENANT_ID));
         ArgumentCaptor<DatabaseCreateRequest> databaseCreateRequestArgumentCaptor = createRequest();
         tenantDataSource.getConnection();
         String actualRole = databaseCreateRequestArgumentCaptor.getValue().getUserRole();

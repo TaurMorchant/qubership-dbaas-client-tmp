@@ -24,7 +24,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
 
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -78,7 +77,7 @@ public class CassandraTest {
 
     @Test
     public void testServiceCassandraDbCreation() throws Exception {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test"));
+        ContextManager.set("tenant", new TenantContextObject("test"));
         UUID testId = UUID.randomUUID();
         sendRequest(TEST_ENDPOINT + SERVICE_ENDPOINT, true, testId.toString(), "service", null);
 
@@ -88,7 +87,7 @@ public class CassandraTest {
     @Test
     public void testTenantCassandraDbCreation() throws Exception {
         UUID testId = UUID.randomUUID();
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant"));
         sendRequest(TEST_ENDPOINT + TENANT_ENDPOINT, false, testId.toString(), "tenant", "test_tenant");
         assertEquals(testId.toString(), getContent(TEST_ENDPOINT + TENANT_ENDPOINT));
     }
@@ -96,11 +95,11 @@ public class CassandraTest {
     @Test
     public void testMultitenancy() throws Exception {
         UUID firstTenantId = UUID.randomUUID();
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant_one"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant_one"));
         sendRequest(TEST_ENDPOINT + TENANT_ENDPOINT, false, firstTenantId.toString(), "tenant-one", "test_tenant_one");
         String firstContent = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
 
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant_two"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant_two"));
         UUID secondTenantId = UUID.randomUUID();
         sendRequest(TEST_ENDPOINT + TENANT_ENDPOINT, false, secondTenantId.toString(), "tenant-two", "test_tenant_two");
         String secondContent = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
@@ -115,7 +114,7 @@ public class CassandraTest {
         String firstContent = getContent(TEST_ENDPOINT + SERVICE_ENDPOINT);
 
         UUID testTenantID = UUID.randomUUID();
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("another_tenant"));
+        ContextManager.set("tenant", new TenantContextObject("another_tenant"));
         sendRequest(TEST_ENDPOINT + TENANT_ENDPOINT, false, testTenantID.toString(), "tenant", "another_tenant");
         String tenantContent = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
 

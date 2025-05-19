@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 import static org.qubership.cloud.dbaas.client.config.DbaasClickhouseConfiguration.*;
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.qubership.cloud.dbaas.client.DbaasConst.SCOPE;
 import static org.qubership.cloud.dbaas.client.DbaasConst.SERVICE;
 import static org.junit.Assert.assertEquals;
@@ -47,7 +46,7 @@ class MicroserviceClickhouseDbConfigurationTest {
 
     @BeforeEach
     void setUp() {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(TENANT_ID));
+        ContextManager.set("tenant", new TenantContextObject(TENANT_ID));
     }
 
     private Map<String, Object> getTenantClassifier() {

@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.junit.Assert.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -63,7 +62,7 @@ public class PostgresTransactionTimoutTest {
 
     @Test
     public void testTransactionalTimeout() {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant_for_cleaning"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant_for_cleaning"));
         try {
             assertEquals(transactionalRequest(TEST_SERVICE_ENDPOINT + "/transactional", 1200).getStatus(), 200);
             Assertions.fail();

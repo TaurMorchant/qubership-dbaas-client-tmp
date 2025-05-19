@@ -29,7 +29,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.UUID;
 
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.qubership.cloud.dbaas.client.config.DbaasMongoConfiguration.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -50,7 +49,7 @@ public class CustomMongoConverterTest {
 
     @BeforeEach
     void setUp() {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(TENANT_ID));
+        ContextManager.set("tenant", new TenantContextObject(TENANT_ID));
     }
 
     private void initContext(Class<?> testClass) throws Exception {

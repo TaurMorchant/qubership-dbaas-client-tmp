@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.qubership.cloud.dbaas.client.DbaasConst.*;
 
 @Slf4j
@@ -22,7 +21,7 @@ public class TenantDbaaSClassifierBuilderTest {
 
     @Test
     void checkTenantSpecificFieldsInClassifier() {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(TEST_TENANT));
+        ContextManager.set("tenant", new TenantContextObject(TEST_TENANT));
         TenantDbaaSClassifierBuilder tenantDbaaSClassifierBuilder = new TenantDbaaSClassifierBuilder(null);
         Map<String, Object> actualClassifier = tenantDbaaSClassifierBuilder.build().asMap();
         log.info(String.valueOf(actualClassifier));
@@ -35,7 +34,7 @@ public class TenantDbaaSClassifierBuilderTest {
     @Test
     void checkConcurrencyForTenantDbaaSClassifierBuilder() {
         /* create 'DbaasDbClassifier.Builder wrapped' before test concurrency */
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(TEST_TENANT));
+        ContextManager.set("tenant", new TenantContextObject(TEST_TENANT));
         TenantDbaaSClassifierBuilder tenantDbaaSClassifierBuilder = new TenantDbaaSClassifierBuilder(null);
         tenantDbaaSClassifierBuilder.build();
 
@@ -59,7 +58,7 @@ public class TenantDbaaSClassifierBuilderTest {
     }
 
     private void checkTenantDbaaSClassifier(TenantDbaaSClassifierBuilder tenantDbaaSClassifierBuilder, String tenantName, AtomicBoolean failed) {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(tenantName));
+        ContextManager.set("tenant", new TenantContextObject(tenantName));
         try {
             Assertions.assertEquals(tenantName, tenantDbaaSClassifierBuilder.build().asMap().get(TENANT_ID));
         } catch (AssertionFailedError e) {

@@ -24,7 +24,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.qubership.cloud.dbaas.client.DbaasConst.SCOPE;
 import static org.qubership.cloud.dbaas.client.DbaasConst.SERVICE;
 import static org.qubership.cloud.dbaas.client.DbaasConst.TENANT;
@@ -61,12 +60,12 @@ class PostgresDataSourceMetricsTest {
     @Test
     void testMetricsRegisteredForTenantDataSources() {
         String firstTenant = "first_tenant";
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(firstTenant));
+        ContextManager.set("tenant", new TenantContextObject(firstTenant));
         DbaasDbClassifier firstTenantClassifier = new TenantDbaaSClassifierBuilder(null).build();
         PostgresDatabase firstDatabase = databasePool.getOrCreateDatabase(PostgresDBType.INSTANCE, firstTenantClassifier);
 
         String secondTenant = "second_tenant";
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject(secondTenant));
+        ContextManager.set("tenant", new TenantContextObject(secondTenant));
         DbaasDbClassifier secondTenantClassifier = new TenantDbaaSClassifierBuilder(null).build();
         PostgresDatabase secondDatabase = databasePool.getOrCreateDatabase(PostgresDBType.INSTANCE, secondTenantClassifier);
 

@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.qubership.cloud.framework.contexts.tenant.TenantProvider.TENANT_CONTEXT_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -79,7 +78,7 @@ public class PostgresDataSourceTest {
 
     @Test
     public void testServiceDataSourceCreation() throws Exception {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant_for_cleaning"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant_for_cleaning"));
         String createdPersonId = sendRequestAndGetId(TEST_ENDPOINT + SERVICE_ENDPOINT, true, "name", "surname", null);
         String getPersonFirstName = getContent(TEST_ENDPOINT + SERVICE_ENDPOINT);
         assertEquals(getNameById(TEST_ENDPOINT + SERVICE_ENDPOINT + "Id", createdPersonId), getPersonFirstName);
@@ -87,7 +86,7 @@ public class PostgresDataSourceTest {
 
     @Test
     public void testTenantDataSourceCreation() throws Exception {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant"));
         String createdPersonId = sendRequestAndGetId(TEST_ENDPOINT + TENANT_ENDPOINT, false, "name", "surname", "test_tenant");
         String gotPersonFirstName = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
         assertEquals(getNameById(TEST_ENDPOINT + TENANT_ENDPOINT + "Id", createdPersonId), gotPersonFirstName);
@@ -95,11 +94,11 @@ public class PostgresDataSourceTest {
 
     @Test
     public void testMultitenancy() throws Exception {
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant_one"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant_one"));
         sendRequestAndGetId(TEST_ENDPOINT + TENANT_ENDPOINT, false, "name", "surname", "test_tenant_one");
         String firstTenantName = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
 
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant_two"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant_two"));
         sendRequestAndGetId(TEST_ENDPOINT + TENANT_ENDPOINT, false, "secName", "secSurname", "test_tenant_two");
         String secondTenantName = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
 
@@ -112,7 +111,7 @@ public class PostgresDataSourceTest {
         sendRequestAndGetId(TEST_ENDPOINT + SERVICE_ENDPOINT, true, "name", "surname", null);
         String personServiceName = getContent(TEST_ENDPOINT + SERVICE_ENDPOINT);
 
-        ContextManager.set(TENANT_CONTEXT_NAME, new TenantContextObject("test_tenant"));
+        ContextManager.set("tenant", new TenantContextObject("test_tenant"));
         sendRequestAndGetId(TEST_ENDPOINT + TENANT_ENDPOINT, false, "secName", "secSurname", "test_tenant");
         String personTenantName = getContent(TEST_ENDPOINT + TENANT_ENDPOINT);
 
