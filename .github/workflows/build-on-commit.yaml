@@ -5,6 +5,6 @@ on:
 
 jobs:
   mvn:
-    uses: TaurMorchant/workflows-test/.github/reusable-workflows/maven-build-and-deploy.yaml@main
+    uses: TaurMorchant/workflows-test/.github/workflows/maven-build-and-deploy.yaml@main
     with:
       java-version: 21
